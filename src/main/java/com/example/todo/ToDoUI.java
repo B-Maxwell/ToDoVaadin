@@ -46,7 +46,8 @@ public class ToDoUI extends UI {
 
         com.vaadin.ui.TextField task = new com.vaadin.ui.TextField();
         Button add = new Button("");
-        add.addStyleName(ValoTheme.BUTTON_PRIMARY);
+        add.addStyleName(ValoTheme.BUTTON_FRIENDLY);
+
         add.setIcon(VaadinIcons.PLUS);
 
         formLayout.addComponentsAndExpand(task);
@@ -56,6 +57,9 @@ public class ToDoUI extends UI {
             todoLayout.add(new Todo(task.getValue()));
             task.clear();
             task.focus();
+            Notification.show("Item Added",
+                    "A new item was successfully added to your list",
+                    Notification.Type.TRAY_NOTIFICATION);
         });
         task.focus();
         add.setClickShortcut(ShortcutAction.KeyCode.ENTER);
@@ -69,8 +73,16 @@ public class ToDoUI extends UI {
     }
 
     private void addDeleteButton() {
-        root.addComponent(new Button("Delete Completed", click -> {
+
+        Button delete = new Button("Deleted Completed Items");
+        delete.addStyleName(ValoTheme.BUTTON_DANGER);
+        delete.addClickListener(clickEvent -> {
             todoLayout.deleteCompleted();
-        } ));
+            Notification.show("Items Deleted",
+                    "Your items were deleted successfully",
+                    Notification.Type.TRAY_NOTIFICATION);
+        });
+
+        root.addComponent(delete);
     }
 }
